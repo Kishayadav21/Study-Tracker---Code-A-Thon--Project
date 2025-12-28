@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Study Tracker - Master Your Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --bg-light: #ffffff;
+            --bg-light-secondary: #f8fafc;
+            --text-light: #1e293b;
+            --text-light-muted: #64748b;
+            --border-light: #e2e8f0;
+            --bg-dark: #0f172a;
+            --bg-dark-secondary: #1e293b;
+            --text-dark: #f1f5f9;
+            --text-dark-muted: #94a3b8;
+            --border-dark: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        /* Added login page styles */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .login-box {
+            background: var(--bg-light);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        body.dark-mode .login-box {
+            background: var(--bg-dark-secondary);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: var(--text-light-muted);
+            font-size: 0.95rem;
+        }
+
+        body.dark-mode .login-subtitle {
+            color: var(--text-dark-muted);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            background: var(--bg-light);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        body.dark-mode .form-group input {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+            border-color: var(--border-dark);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .login-btn {
+            padding: 0.85rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-light-muted);
+            font-size: 0.95rem;
+        }
+
+        body.dark-mode .toggle-form {
+            color: var(--text-dark-muted);
+        }
+
+        .toggle-form button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: underline;
+            font-size: 0.95rem;
+        }
+
+        .toggle-form button:hover {
+            color: var(--primary-dark);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        header {
+            background: var(--bg-light-secondary);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode header {
+            background: var(--bg-dark-secondary);
+            border-bottom-color: var(--border-dark);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 0.6rem 1rem;
+            border: none;
+            background: var(--primary);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: var(--secondary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .logout-btn {
+            padding: 0.6rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #db2777;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-light-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .stat-card {
+            background: var(--bg-dark-secondary);
+            border-color: var(--border-dark);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.1);
+        }
+
+        body.dark-mode .stat-card:hover {
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-light-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        body.dark-mode .stat-label {
+            color: var(--text-dark-muted);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        body.dark-mode .progress-bar {
+            background: var(--border-dark);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .timer-section {
+            background: var(--bg-light-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        body.dark-mode .timer-section {
+            background: var(--bg-dark-secondary);
+            border-color: var(--border-dark);
+        }
+
+        .timer-display {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1.5rem 0;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.05em;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        body.dark-mode .btn-secondary {
+            background: var(--bg-dark);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #db2777;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(236, 72, 153, 0.3);
+        }
+
+        .activity-input-section {
+            background: var(--bg-light-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        body.dark-mode .activity-input-section {
+            background: var(--bg-dark-secondary);
+            border-color: var(--border-dark);
+        }
+
+        .activity-input-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            background: var(--bg-light);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        body.dark-mode input[type="text"],
+        body.dark-mode input[type="number"],
+        body.dark-mode select {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+            border-color: var(--border-dark);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .sessions-section {
+            background: var(--bg-light-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        body.dark-mode .sessions-section {
+            background: var(--bg-dark-secondary);
+            border-color: var(--border-dark);
+        }
+
+        .sessions-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+        }
+
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.2s;
+        }
+
+        body.dark-mode .session-item {
+            background: var(--bg-dark);
+        }
+
+        .session-item:hover {
+            transform: translateX(4px);
+        }
+
+        .session-info {
+            flex: 1;
+        }
+
+        .session-activity {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .session-time {
+            font-size: 0.875rem;
+            color: var(--text-light-muted);
+        }
+
+        body.dark-mode .session-time {
+            color: var(--text-dark-muted);
+        }
+
+        .session-duration {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light-muted);
+        }
+
+        body.dark-mode .empty-state {
+            color: var(--text-dark-muted);
+        }
+
+        .insights-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .insights-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .insight-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .chart-container {
+            background: var(--bg-light-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        body.dark-mode .chart-container {
+            background: var(--bg-dark-secondary);
+            border-color: var(--border-dark);
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .simple-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 1rem;
+            height: 300px;
+            margin: 2rem 0;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            min-height: 20px;
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .goal-item {
+            background: var(--bg-light-secondary);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.dark-mode .goal-item {
+            background: var(--bg-dark-secondary);
+        }
+
+        .goal-info {
+            flex: 1;
+        }
+
+        .goal-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .goal-progress {
+            font-size: 0.875rem;
+            color: var(--text-light-muted);
+        }
+
+        body.dark-mode .goal-progress {
+            color: var(--text-dark-muted);
+        }
+
+        .settings-section {
+            background: var(--bg-light-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        body.dark-mode .settings-section {
+            background: var(--bg-dark-secondary);
+            border-color: var(--border-dark);
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        body.dark-mode .settings-item {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+            background: var(--border-light);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        body.dark-mode .toggle-switch {
+            background: var(--border-dark);
+        }
+
+        .toggle-switch.active {
+            background: var(--success);
+        }
+
+        .toggle-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: left 0.2s;
+        }
+
+        .toggle-switch.active .toggle-knob {
+            left: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-left {
+                width: 100%;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+            }
+
+            .timer-display {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            input,
+            select {
+                width: 100%;
+            }
+
+            .goal-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .simple-chart {
+                height: 200px;
+            }
+
+            .login-box {
+                margin: 1rem;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .session-item {
+            animation: slideIn 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Added login page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <div class="login-logo">📚</div>
+                <div class="login-title">Study Tracker</div>
+                <div class="login-subtitle">Master Your Learning</div>
+            </div>
+
+            <div id="alertBox" class="alert"></div>
+
+            <form id="loginForm" class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="text" id="loginEmail" placeholder="your.email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+
+            <form id="registerForm" class="login-form" style="display: none;" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="text" id="regEmail" placeholder="your.email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Confirm Password</label>
+                    <input type="password" id="regConfirmPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="login-btn">Create Account</button>
+            </form>
+
+            <div class="toggle-form">
+                <span id="toggleText">Don't have an account? </span>
+                <button type="button" id="toggleBtn">Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appContainer" style="display: none;">
+        <header>
+            <div class="header-left">
+                <div class="logo">📚</div>
+                <div class="header-title">Study Tracker</div>
+            </div>
+            <div class="header-right">
+                <div class="nav-buttons">
+                    <button class="nav-btn active" onclick="showPage('dashboard', event)">Dashboard</button>
+                    <button class="nav-btn" onclick="showPage('analytics', event)">Analytics</button>
+                    <button class="nav-btn" onclick="showPage('goals', event)">Goals & Tasks</button>
+                    <button class="nav-btn" onclick="showPage('history', event)">History</button>
+                    <button class="nav-btn" onclick="showPage('settings', event)">Settings</button>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
+        </header>
+
+
+        <!-- Dashboard Page -->
+        <div class="page active" id="dashboard-page">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Today's Study Time</div>
+                        <div class="stat-value" id="todayTime">0h 0m</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="todayProgress" style="width: 0%"></div>
+                        </div>
+                        <div style="font-size: 0.875rem; margin-top: 0.5rem; color: var(--text-light-muted);">
+                            Goal: 4h 0m
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Current Streak</div>
+                        <div class="stat-value" id="currentStreak">0 🔥</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="streakProgress" style="width: 0%"></div>
+                        </div>
+                        <div style="font-size: 0.875rem; margin-top: 0.5rem; color: var(--text-light-muted);">
+                            days in a row
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Longest Streak</div>
+                        <div class="stat-value" id="longestStreak">0 ⭐</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="longestProgress" style="width: 0%"></div>
+                        </div>
+                        <div style="font-size: 0.875rem; margin-top: 0.5rem; color: var(--text-light-muted);">
+                            personal best
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timer-section">
+                    <h2>Study Timer</h2>
+                    <div class="timer-display" id="timerDisplay">00:00:00</div>
+                    <div class="timer-controls">
+                        <button class="btn-primary" onclick="startTimer()">Start</button>
+                        <button class="btn-primary" onclick="pauseTimer()">Pause</button>
+                        <button class="btn-secondary" onclick="resetTimer()">Reset</button>
+                        <button class="btn-primary" onclick="saveSession()" style="background: var(--success);">Save Session</button>
+                    </div>
+                </div>
+
+                <div class="activity-input-section">
+                    <h3>Log Study Activity</h3>
+                    <div class="input-group">
+                        <input type="text" id="activityName" placeholder="e.g., Mathematics, Reading, Coding...">
+                        <input type="number" id="activityMinutes" placeholder="Minutes" min="1">
+                        <select id="activityCategory">
+                            <option value="Math">Math</option>
+                            <option value="Science">Science</option>
+                            <option value="Languages">Languages</option>
+                            <option value="Programming">Programming</option>
+                            <option value="Reading">Reading</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button class="btn-primary" onclick="quickLogActivity()">Log Activity</button>
+                    </div>
+                </div>
+
+                <div class="sessions-section">
+                    <h3>Recent Sessions</h3>
+                    <div id="sessionsList">
+                        <div class="empty-state">No sessions yet. Start studying to see your progress here!</div>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <h3>✨ AI Insights & Tips</h3>
+                    <div id="insightsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Page -->
+        <div class="page" id="analytics-page">
+            <div class="container">
+                <h2 style="margin-bottom: 2rem; font-size: 2rem;">📊 Analytics Dashboard</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">Daily Study Time (Last 7 Days)</div>
+                    <div class="simple-chart" id="dailyChart"></div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Study Time</div>
+                        <div class="stat-value" id="totalTime">0h</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Average Per Session</div>
+                        <div class="stat-value" id="avgSession">0m</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Sessions</div>
+                        <div class="stat-value" id="totalSessions">0</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Study Time by Category</div>
+                    <div id="categoryStats"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="goals-page">
+            <div class="container">
+                <h2 style="margin-bottom: 2rem; font-size: 2rem;">🎯 Goals & Tasks</h2>
+
+                <div class="activity-input-section">
+                    <h3>Add a New Goal</h3>
+                    <div class="input-group">
+                        <input type="text" id="goalName" placeholder="e.g., Complete Math Chapter 5">
+                        <input type="number" id="goalHours" placeholder="Target Hours" min="1">
+                        <button class="btn-primary" onclick="addGoal()">Add Goal</button>
+                    </div>
+                </div>
+
+                <div class="sessions-section">
+                    <h3>Your Goals</h3>
+                    <div id="goalsList">
+                        <div class="empty-state">No goals yet. Set your first goal to get started!</div>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <h3>💡 Goal Tips</h3>
+                    <div class="insight-item">Set realistic daily targets to build consistency</div>
+                    <div class="insight-item">Break large goals into smaller milestones</div>
+                    <div class="insight-item">Review and adjust goals weekly</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="history-page">
+            <div class="container">
+                <h2 style="margin-bottom: 2rem; font-size: 2rem;">📜 Complete History</h2>
+
+                <div class="input-group" style="margin-bottom: 2rem;">
+                    <input type="text" id="filterCategory" placeholder="Filter by category...">
+                    <button class="btn-primary" onclick="filterHistory()">Filter</button>
+                    <button class="btn-secondary" onclick="clearFilter()">Clear Filter</button>
+                </div>
+
+                <div class="sessions-section">
+                    <div id="fullHistory">
+                        <div class="empty-state">No sessions yet. Start studying!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="settings-page">
+            <div class="container">
+                <h2 style="margin-bottom: 2rem; font-size: 2rem;">⚙ Settings</h2>
+
+                <div class="settings-section">
+                    <div class="settings-item">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Dark Mode</div>
+                            <div style="font-size: 0.875rem; color: var(--text-light-muted);">Enable dark theme for comfortable viewing</div>
+                        </div>
+                        <div class="toggle-switch" id="darkModeToggle" onclick="toggleTheme()">
+                            <div class="toggle-knob"></div>
+                        </div>
+                    </div>
+
+                    <div class="settings-item">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Daily Study Goal</div>
+                            <div style="font-size: 0.875rem; color: var(--text-light-muted);">Set your target study hours per day</div>
+                        </div>
+                        <input type="number" id="dailyGoalInput" min="1" max="24" style="width: 80px; padding: 0.5rem;">
+                    </div>
+
+                    <div class="settings-item">
+                        <button class="btn-primary" onclick="saveDailyGoal()">Save Goal</button>
+                        <button class="btn-danger" onclick="clearAllData()">Clear All Data</button>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <h3>💾 Data Storage</h3>
+                    <div class="insight-item">All your data is stored locally on your device</div>
+                    <div class="insight-item">Your privacy is protected - no data is sent to servers</div>
+                    <div class="insight-item">Use "Clear All Data" to reset everything</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timerSeconds = 0;
+        let timerInterval = null;
+        let isRunning = false;
+        let sessions = [];
+        let goals = [];
+        let dailyGoal = 4 * 3600;
+        let currentUser = null;
+
+        function showAlert(message, type = 'error') {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = 'alert alert-' + type + ' show';
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+                alertBox.className = 'alert alert-' + type;
+            }, 4000);
+        }
+
+        function escapeHtml(s) {
+            if (typeof s !== 'string') return s;
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        async function handleLogin(event) {
+            if (event && event.preventDefault) event.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json().catch(() => null);
+
+                if (response.ok) {
+                    currentUser = data.user;
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userData', JSON.stringify(data.user));
+                    showAlert('✅ Login successful!', 'success');
+                    // slight delay so user sees alert
+                    setTimeout(loadAppUI, 400);
+                } else {
+                    showAlert((data && data.message) ? data.message : 'Login failed', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert('Error connecting to server. Make sure the backend is running.', 'error');
+            }
+        }
+
+        async function handleRegister(event) {
+            if (event && event.preventDefault) event.preventDefault();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json().catch(() => null);
+
+                if (response.ok) {
+                    showAlert('✅ Account created! Please sign in.', 'success');
+                    document.getElementById('loginEmail').value = email;
+                    document.getElementById('regEmail').value = '';
+                    document.getElementById('regPassword').value = '';
+                    document.getElementById('regConfirmPassword').value = '';
+                    toggleLoginForm();
+                } else {
+                    showAlert((data && data.message) ? data.message : 'Registration failed', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert('Error connecting to server. Make sure the backend is running.', 'error');
+            }
+        }
+
+        function handleLogout() {
+            if (!confirm('Are you sure you want to logout?')) return;
+            currentUser = null;
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userData');
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'flex';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function loadAppUI() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            initTheme();
+            loadData();
+            updateDisplay();
+        }
+
+        function checkLoginStatus() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (userEmail) {
+                currentUser = { email: userEmail };
+                loadAppUI();
+            }
+        }
+
+        function toggleLoginForm(e) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const toggleText = document.getElementById('toggleText');
+            const toggleBtn = document.getElementById('toggleBtn');
+
+            const showingLogin = loginForm.style.display !== 'none' && loginForm.style.display !== '';
+            const loginIsVisible = loginForm.style.display === '' ? true : showingLogin;
+
+            if (loginIsVisible) {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'flex';
+                toggleText.textContent = 'Already have an account? ';
+                toggleBtn.textContent = 'Sign In';
+            } else {
+                loginForm.style.display = 'flex';
+                registerForm.style.display = 'none';
+                toggleText.textContent = "Don't have an account? ";
+                toggleBtn.textContent = 'Sign Up';
+            }
+        }
+
+        // wire the toggle button
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbtn = document.getElementById('toggleBtn');
+            if (tbtn) tbtn.addEventListener('click', toggleLoginForm);
+        });
+
+        function showPage(pageName, ev) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            const pageEl = document.getElementById(pageName + '-page');
+            if (pageEl) pageEl.classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            // if event provided, mark the clicked button active; otherwise try to find by onclick attr
+            if (ev && ev.currentTarget) {
+                ev.currentTarget.classList.add('active');
+            } else {
+                // fallback: find button whose onclick contains the pageName
+                const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => {
+                    const attr = b.getAttribute('onclick') || '';
+                    return attr.includes("'" + pageName + "'") || attr.includes('"' + pageName + '"');
+                });
+                if (btn) btn.classList.add('active');
+            }
+
+            if (pageName === 'analytics') updateAnalytics();
+            if (pageName === 'history') loadFullHistory();
+            if (pageName === 'goals') loadGoals();
+        }
+
+        // ---------- Persistence ----------
+        function loadData() {
+            const saved = localStorage.getItem('studyTrackerData');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    sessions = data.sessions || [];
+                    timerSeconds = data.timerSeconds || 0;
+                    goals = data.goals || [];
+                    dailyGoal = data.dailyGoal || 4 * 3600;
+                } catch (e) {
+                    console.error('Failed to parse saved data', e);
+                }
+            }
+            updateDisplay();
+        }
+
+        function saveData() {
+            const data = { sessions, timerSeconds, goals, dailyGoal };
+            localStorage.setItem('studyTrackerData', JSON.stringify(data));
+        }
+
+        // ---------- Theme ----------
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeButton();
+            updateDarkModeToggle();
+        }
+
+        function updateThemeButton() {
+            const btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = document.body.classList.contains('dark-mode') ? '☀' : '🌙';
+        }
+
+        function updateDarkModeToggle() {
+            const toggle = document.getElementById('darkModeToggle');
+            if (toggle) {
+                if (document.body.classList.contains('dark-mode')) {
+                    toggle.classList.add('active');
+                } else {
+                    toggle.classList.remove('active');
+                }
+            }
+        }
+
+        function initTheme() {
+            const theme = localStorage.getItem('theme') || 'light';
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+            updateThemeButton();
+            updateDarkModeToggle();
+        }
+
+        // ---------- Timer ----------
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                updateTimerDisplay();
+                // save periodically (every 10 seconds)
+                if (timerSeconds % 10 === 0) saveData();
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+        }
+
+        function resetTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            timerSeconds = 0;
+            updateTimerDisplay();
+            saveData();
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(timerSeconds / 3600);
+            const minutes = Math.floor((timerSeconds % 3600) / 60);
+            const seconds = timerSeconds % 60;
+            const hh = String(hours).padStart(2, '0');
+            const mm = String(minutes).padStart(2, '0');
+            const ss = String(seconds).padStart(2, '0');
+            const disp = hh + ':' + mm + ':' + ss;
+            const el = document.getElementById('timerDisplay');
+            if (el) el.textContent = disp;
+        }
+
+        function saveSession() {
+            if (timerSeconds < 60) {
+                alert('Please study for at least 1 minute before saving!');
+                return;
+            }
+
+            const activityName = document.getElementById('activityName').value || 'Study Session';
+            const session = {
+                id: Date.now(),
+                name: activityName,
+                duration: timerSeconds,
+                date: new Date().toISOString(),
+                category: document.getElementById('activityCategory').value
+            };
+
+            sessions.unshift(session);
+            if (sessions.length > 100) sessions.pop();
+
+            resetTimer();
+            document.getElementById('activityName').value = '';
+            saveData();
+            updateDisplay();
+
+            alert('✅ Session saved! Great work! 🎉');
+        }
+
+        function quickLogActivity() {
+            const name = document.getElementById('activityName').value;
+            const minutes = parseInt(document.getElementById('activityMinutes').value);
+
+            if (!name || !minutes || minutes < 1) {
+                alert('Please fill in all fields with valid values!');
+                return;
+            }
+
+            const session = {
+                id: Date.now(),
+                name: name,
+                duration: minutes * 60,
+                date: new Date().toISOString(),
+                category: document.getElementById('activityCategory').value
+            };
+
+            sessions.unshift(session);
+            if (sessions.length > 100) sessions.pop();
+
+            document.getElementById('activityName').value = '';
+            document.getElementById('activityMinutes').value = '';
+
+            saveData();
+            updateDisplay();
+            alert('✅ Activity logged successfully!');
+        }
+
+        function addGoal() {
+            const name = document.getElementById('goalName').value;
+            const hours = parseInt(document.getElementById('goalHours').value);
+
+            if (!name || !hours || hours < 1) {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            const goal = {
+                id: Date.now(),
+                name: name,
+                targetSeconds: hours * 3600,
+                createdDate: new Date().toISOString(),
+                completed: false,
+                completedSeconds: 0
+            };
+
+            goals.unshift(goal);
+            document.getElementById('goalName').value = '';
+            document.getElementById('goalHours').value = '';
+
+            saveData();
+            loadGoals();
+            alert('✅ Goal added!');
+        }
+
+        function loadGoals() {
+            const goalsList = document.getElementById('goalsList');
+            if (!goals || goals.length === 0) {
+                goalsList.innerHTML = '<div class="empty-state">No goals yet. Set your first goal to get started!</div>';
+                return;
+            }
+
+            goalsList.innerHTML = goals.map(goal => {
+                const completedSeconds = goal.completedSeconds || 0;
+                const progress = goal.targetSeconds > 0 ? Math.min(100, (completedSeconds / goal.targetSeconds) * 100) : 0;
+                const goalMinutes = Math.floor(goal.targetSeconds / 60);
+                const completedMinutes = Math.floor(completedSeconds / 60);
+
+                return `
+                    <div class="goal-item">
+                        <div class="goal-info">
+                            <div class="goal-name">${escapeHtml(goal.name)}</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <div class="goal-progress">
+                                ${completedMinutes} / ${goalMinutes} minutes
+                            </div>
+                        </div>
+                        <button class="btn-danger" onclick="deleteGoal(${goal.id})">Delete</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteGoal(id) {
+            goals = goals.filter(g => g.id !== id);
+            saveData();
+            loadGoals();
+        }
+
+        function updateAnalytics() {
+            if (!sessions || sessions.length === 0) {
+                const chart = document.getElementById('dailyChart');
+                if (chart) chart.innerHTML = '';
+                return;
+            }
+
+            const totalSeconds = sessions.reduce((sum, s) => sum + s.duration, 0);
+            const totalHours = Math.floor(totalSeconds / 3600);
+            const avgSessionMinutes = Math.floor((totalSeconds / sessions.length) / 60);
+
+            if (document.getElementById('totalTime')) document.getElementById('totalTime').textContent = totalHours + 'h';
+            if (document.getElementById('avgSession')) document.getElementById('avgSession').textContent = avgSessionMinutes + 'm';
+            if (document.getElementById('totalSessions')) document.getElementById('totalSessions').textContent = sessions.length;
+
+            const dailyData = {};
+            const today = new Date();
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().slice(0,10);
+                dailyData[dateStr] = 0;
+            }
+
+            sessions.forEach(s => {
+                const dateStr = new Date(s.date).toISOString().slice(0,10);
+                if (dateStr in dailyData) {
+                    dailyData[dateStr] += s.duration / 3600;
+                }
+            });
+
+            const maxVal = Math.max(...Object.values(dailyData), 1);
+            const chart = document.getElementById('dailyChart');
+            if (chart) {
+                chart.innerHTML = Object.entries(dailyData).map(([date, hours]) => {
+                    const height = (hours / maxVal) * 100;
+                    const weekday = new Date(date).toLocaleDateString(undefined, { weekday: 'short' });
+                    return `
+                        <div class="chart-bar" style="height: ${Math.max(6, height)}%">
+                            <div class="chart-value">${hours.toFixed(1)}h</div>
+                            <div class="chart-label">${weekday}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const categoryData = {};
+            sessions.forEach(s => {
+                if (!categoryData[s.category]) categoryData[s.category] = 0;
+                categoryData[s.category] += s.duration / 60;
+            });
+
+            const categoryStats = document.getElementById('categoryStats');
+            const totalMinutesAcrossCategories = Object.values(categoryData).reduce((sum, minutes) => sum + minutes, 0);
+            if (categoryStats) {
+                categoryStats.innerHTML = Object.entries(categoryData).map(([cat, minutes]) => `
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                            <span>${escapeHtml(cat)}</span>
+                            <span style="font-weight:600;">${Math.floor(minutes)} minutes</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${totalMinutesAcrossCategories > 0 ? Math.min(100, (minutes / totalMinutesAcrossCategories) * 100) : 0}%"></div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // ---------- History ----------
+        function loadFullHistory() {
+            const historyDiv = document.getElementById('fullHistory');
+            if (!sessions || sessions.length === 0) {
+                historyDiv.innerHTML = '<div class="empty-state">No sessions yet!</div>';
+                return;
+            }
+
+            historyDiv.innerHTML = sessions.map(s => {
+                const hours = Math.floor(s.duration / 3600);
+                const minutes = Math.floor((s.duration % 3600) / 60);
+                const dateStr = new Date(s.date).toLocaleString();
+                return `
+                    <div class="session-item">
+                        <div class="session-info">
+                            <div class="session-activity">${escapeHtml(s.name)} (${escapeHtml(s.category)})</div>
+                            <div class="session-time">${dateStr}</div>
+                        </div>
+                        <div class="session-duration">${hours}h ${minutes}m</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterHistory() {
+            const filter = (document.getElementById('filterCategory').value || '').toLowerCase();
+            const historyDiv = document.getElementById('fullHistory');
+
+            const filtered = sessions.filter(s =>
+                (s.category && s.category.toLowerCase().includes(filter)) || (s.name && s.name.toLowerCase().includes(filter))
+            );
+
+            if (filtered.length === 0) {
+                historyDiv.innerHTML = '<div class="empty-state">No matching sessions found!</div>';
+                return;
+            }
+
+            historyDiv.innerHTML = filtered.map(s => {
+                const hours = Math.floor(s.duration / 3600);
+                const minutes = Math.floor((s.duration % 3600) / 60);
+                const dateStr = new Date(s.date).toLocaleString();
+                return `
+                    <div class="session-item">
+                        <div class="session-info">
+                            <div class="session-activity">${escapeHtml(s.name)} (${escapeHtml(s.category)})</div>
+                            <div class="session-time">${dateStr}</div>
+                        </div>
+                        <div class="session-duration">${hours}h ${minutes}m</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearFilter() {
+            const f = document.getElementById('filterCategory');
+            if (f) f.value = '';
+            loadFullHistory();
+        }
+
+        function saveDailyGoal() {
+            const el = document.getElementById('dailyGoalInput');
+            const goalHours = parseInt(el && el.value);
+            if (isNaN(goalHours) || goalHours < 1 || goalHours > 24) {
+                alert('Please enter a valid number between 1 and 24!');
+                return;
+            }
+            dailyGoal = goalHours * 3600;
+            saveData();
+            alert('✅ Daily goal updated!');
+            updateDisplay();
+        }
+
+        function clearAllData() {
+            if (!confirm('Are you sure you want to delete ALL your data? This cannot be undone!')) return;
+            sessions = [];
+            goals = [];
+            timerSeconds = 0;
+            saveData();
+            updateDisplay();
+            loadFullHistory();
+            loadGoals();
+            alert('✅ All data cleared!');
+        }
+
+        function updateDisplay() {
+            updateTimerDisplay();
+
+            const todayKey = new Date().toISOString().slice(0,10);
+            const todaySeconds = sessions
+                .filter(s => new Date(s.date).toISOString().slice(0,10) === todayKey)
+                .reduce((sum, s) => sum + s.duration, 0);
+
+            const todayHours = Math.floor(todaySeconds / 3600);
+            const todayMinutes = Math.floor((todaySeconds % 3600) / 60);
+            const todayTimeEl = document.getElementById('todayTime');
+            if (todayTimeEl) todayTimeEl.textContent = `${todayHours}h ${todayMinutes}m`;
+
+            const todayProgress = Math.min(100, (todaySeconds / dailyGoal) * 100);
+            const todayProgEl = document.getElementById('todayProgress');
+            if (todayProgEl) todayProgEl.style.width = todayProgress + '%';
+
+            const streakDays = calculateStreak();
+            const currentStreakEl = document.getElementById('currentStreak');
+            if (currentStreakEl) currentStreakEl.textContent = streakDays + ' 🔥';
+            const streakProgEl = document.getElementById('streakProgress');
+            if (streakProgEl) streakProgEl.style.width = Math.min(100, (streakDays / 30) * 100) + '%';
+
+            const longestStreak = findLongestStreak();
+            const longestEl = document.getElementById('longestStreak');
+            if (longestEl) longestEl.textContent = longestStreak + ' ⭐';
+            const longestProgEl = document.getElementById('longestProgress');
+            if (longestProgEl) longestProgEl.style.width = Math.min(100, (longestStreak / 30) * 100) + '%';
+
+            updateSessionsList();
+            updateInsights();
+            updateDailyGoalInput();
+        }
+
+        function updateSessionsList() {
+            const sessionsList = document.getElementById('sessionsList');
+            if (!sessions || sessions.length === 0) {
+                sessionsList.innerHTML = '<div class="empty-state">No sessions yet. Start studying to see your progress here!</div>';
+                return;
+            }
+
+            sessionsList.innerHTML = sessions.slice(0, 5).map(s => {
+                const hours = Math.floor(s.duration / 3600);
+                const minutes = Math.floor((s.duration % 3600) / 60);
+                const dateStr = new Date(s.date).toLocaleString();
+                return `
+                    <div class="session-item">
+                        <div class="session-info">
+                            <div class="session-activity">${escapeHtml(s.name)}</div>
+                            <div class="session-time">${dateStr}</div>
+                        </div>
+                        <div class="session-duration">${hours}h ${minutes}m</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateInsights() {
+            const insightsList = document.getElementById('insightsList');
+            const insights = [
+                '🎯 Consistency is key! Study at the same time daily to build habits.',
+                '💪 Great progress! You\'re on your way to mastery.',
+                '⚡ Short, focused sessions are often more effective than long ones.',
+                '🧠 Take regular breaks to improve retention and focus.',
+                '📈 Track your progress regularly to stay motivated!',
+                '🌟 You\'re crushing your goals! Keep up the excellent work!',
+                '✨ Remember: Small daily improvements compound over time.',
+                '🚀 Your streak is amazing! Don\'t break it now!'
+            ];
+
+            const randomInsights = insights.sort(() => Math.random() - 0.5).slice(0, 3);
+            if (insightsList) {
+                insightsList.innerHTML = randomInsights.map(insight => `<div class="insight-item">${escapeHtml(insight)}</div>`).join('');
+            }
+        }
+
+        function updateDailyGoalInput() {
+            const input = document.getElementById('dailyGoalInput');
+            if (input) input.value = dailyGoal / 3600;
+        }
+
+        function calculateStreak() {
+            if (!sessions || sessions.length === 0) return 0;
+
+            let streak = 0;
+            const today = new Date();
+
+            for (let i = 0; i < 365; i++) {
+                const checkDate = new Date(today);
+                checkDate.setDate(checkDate.getDate() - i);
+                const dateKey = checkDate.toISOString().slice(0,10);
+
+                if (sessions.some(s => new Date(s.date).toISOString().slice(0,10) === dateKey)) {
+                    streak++;
+                } else if (i > 0) {
+                    break;
+                }
+            }
+
+            return streak;
+        }
+
+        function findLongestStreak() {
+            if (!sessions || sessions.length === 0) return 0;
+
+            const sessionDates = {};
+            sessions.forEach(s => {
+                sessionDates[new Date(s.date).toISOString().slice(0,10)] = true;
+            });
+
+            let maxStreak = 0;
+            let currentStreak = 0;
+            let currentDate = new Date();
+
+            for (let i = 0; i < 365; i++) {
+                const dateKey = currentDate.toISOString().slice(0,10);
+
+                if (sessionDates[dateKey]) {
+                    currentStreak++;
+                    maxStreak = Math.max(maxStreak, currentStreak);
+                } else {
+                    currentStreak = 0;
+                }
+
+                currentDate.setDate(currentDate.getDate() - 1);
+            }
+
+            return maxStreak;
+        }
+        window.handleLogin = handleLogin;
+        window.handleRegister = handleRegister;
+        window.toggleLoginForm = toggleLoginForm;
+        window.showPage = showPage;
+        window.startTimer = startTimer;
+        window.pauseTimer = pauseTimer;
+        window.resetTimer = resetTimer;
+        window.saveSession = saveSession;
+        window.quickLogActivity = quickLogActivity;
+        window.addGoal = addGoal;
+        window.filterHistory = filterHistory;
+        window.clearFilter = clearFilter;
+        window.saveDailyGoal = saveDailyGoal;
+        window.clearAllData = clearAllData;
+        window.handleLogout = handleLogout;
+
+        // Run at load
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoginStatus();
+            setInterval(saveData, 5000);
+            // ensure initial theme/dark toggle state
+            initTheme();
+        });
+    </script>
+</body>
+</html>

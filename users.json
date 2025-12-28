@@ -1,0 +1,14 @@
+{
+  "tester@example.com": {
+    "password_hash": "scrypt:32768:8:1$EoFAIRDtqPxMlpeM$b06c8b2180c42b3cb83e5f6c8d6837c0268a19e07178e0bf3efe1b46a2ee0f59eb9fe3c3227761de044e202c5737a27b5b8f7bd6b2cf0c9f45e9678104c1a8e2",
+    "created_at": "2025-12-11T06:54:50.327768Z"
+  },
+  "testing@gmail.com": {
+    "password_hash": "scrypt:32768:8:1$mZHKXcdYbfIYyPHc$a84b3e34596d73d6398e0c19339766008fbad670a1e55804517287b9641a0d747d9e7d2cccc73bff6bd8d5a78c88b0f11cfa8e91d53f7bd00fa308c28d82c317",
+    "created_at": "2025-12-11T07:22:45.761846Z"
+  },
+  "sakshi@gmail.com": {
+    "password_hash": "scrypt:32768:8:1$9OsMxqP2MpbzBBQc$4c676e59475f493ac31bc7e04f4984ac20bac9d081e4f40d3efbcc539af2b3b10429d72fb60909aa5218e103cd24c1151571280f26d2f2e9c0482628ca361040",
+    "created_at": "2025-12-29T00:44:05.673501Z"
+  }
+}
